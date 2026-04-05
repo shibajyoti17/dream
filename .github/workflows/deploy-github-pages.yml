@@ -1,5 +1,9 @@
 # Publishes the Vite build to GitHub Pages.
 # After pushing: Repo → Settings → Pages → Source: GitHub Actions
+#
+# Vault / Cat API: add REPOSITORY secret VITE_VAULT_KEY (and VITE_CAT_API_KEY) at
+# Settings → Secrets and variables → Actions → Repository secrets
+# Name must be exactly VITE_VAULT_KEY (VITE_ prefix required).
 name: Deploy to GitHub Pages
 
 on:
@@ -16,13 +20,10 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  # No `environment:` here — use **Repository secrets** only (what you have in the screenshot).
+  # Putting `environment: github-pages` on the build job can require approvals or confuse env vs repo secrets.
   build:
     runs-on: ubuntu-latest
-    # Same environment as deploy so secrets stored under
-    # Settings → Environments → github-pages are available during `npm run build`.
-    # Repository secrets (Settings → Secrets and variables → Actions) are also available.
-    environment:
-      name: github-pages
     steps:
       - uses: actions/checkout@v4
 
@@ -31,8 +32,6 @@ jobs:
           node-version: "20"
           cache: npm
 
-      # Default: /repo-name/ for https://<user>.github.io/<repo>/
-      # Override: add repo variable VITE_BASE_PATH = / for a custom domain at site root.
       - name: Set VITE_BASE_PATH
         run: |
           BASE="${{ vars.VITE_BASE_PATH }}"
@@ -41,9 +40,27 @@ jobs:
 
       - run: npm ci
 
+      # Vite reads .env.production during `vite build`; avoids env not reaching the Node process.
+      - name: Write .env.production for build
+        env:
+          VITE_VAULT_KEY: ${{ secrets.VITE_VAULT_KEY }}
+          VITE_CAT_API_KEY: ${{ secrets.VITE_CAT_API_KEY }}
+        run: |
+          rm -f .env.production
+          if [ -z "$VITE_VAULT_KEY" ]; then
+            echo "::warning::Secret VITE_VAULT_KEY is empty or missing. Add it under Settings → Secrets and variables → Actions (Repository secrets), exact name: VITE_VAULT_KEY"
+          else
+            printf 'VITE_VAULT_KEY=%s\n' "$VITE_VAULT_KEY" >> .env.production
+            echo "VITE_VAULT_KEY is present for build (value not shown)."
+          fi
+          if [ -n "$VITE_CAT_API_KEY" ]; then
+            printf 'VITE_CAT_API_KEY=%s\n' "$VITE_CAT_API_KEY" >> .env.production
+          fi
+
       - name: Build
         run: npm run build
         env:
+          VITE_BASE_PATH: ${{ env.VITE_BASE_PATH }}
           VITE_CAT_API_KEY: ${{ secrets.VITE_CAT_API_KEY }}
           VITE_VAULT_KEY: ${{ secrets.VITE_VAULT_KEY }}
 
