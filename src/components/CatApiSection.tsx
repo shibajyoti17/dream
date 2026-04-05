@@ -171,18 +171,30 @@ export function CatApiSection() {
           </h2>
           <div className="catapi-card catapi-card--hint">
             <p className="catapi-hint">
-              Add your{" "}
-              <a
-                href="https://thecatapi.com/"
-                target="_blank"
-                rel="noreferrer noopener"
-              >
-                Cat API
-              </a>{" "}
-              key as <code className="catapi-code">VITE_CAT_API_KEY</code> in{" "}
-              <code className="catapi-code">.env.local</code> (see{" "}
-              <code className="catapi-code">.env.example</code>), then restart{" "}
-              <code className="catapi-code">npm run dev</code>.
+              {import.meta.env.PROD ? (
+                <>
+                  Add <code className="catapi-code">VITE_CAT_API_KEY</code> in your host&apos;s{" "}
+                  <strong>environment variables</strong> for production (e.g.{" "}
+                  <strong>Vercel</strong> → Settings → Environment Variables, or{" "}
+                  <strong>GitHub Actions</strong> secrets if Pages builds there), then{" "}
+                  <strong>redeploy</strong>. <code className="catapi-code">.env.local</code> is only
+                  for your computer — it is not used on the live site.
+                </>
+              ) : (
+                <>
+                  Add your{" "}
+                  <a
+                    href="https://thecatapi.com/"
+                    target="_blank"
+                    rel="noreferrer noopener"
+                  >
+                    Cat API
+                  </a>{" "}
+                  key as <code className="catapi-code">VITE_CAT_API_KEY</code> in{" "}
+                  <code className="catapi-code">.env.local</code>, then restart{" "}
+                  <code className="catapi-code">npm run dev</code>.
+                </>
+              )}
             </p>
           </div>
         </div>

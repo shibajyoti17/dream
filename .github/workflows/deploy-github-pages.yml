@@ -1,14 +1,11 @@
-# Publishes the Vite build to GitHub Pages.
-# After pushing: Repo → Settings → Pages → Source: GitHub Actions
-#
-# Vault / Cat API: add REPOSITORY secret VITE_VAULT_KEY (and VITE_CAT_API_KEY) at
-# Settings → Secrets and variables → Actions → Repository secrets
-# Name must be exactly VITE_VAULT_KEY (VITE_ prefix required).
+# GitHub Pages deploy. Secrets: Settings → Secrets and variables → Actions → Repository secrets
+# Names: VITE_VAULT_KEY, VITE_CAT_API_KEY (exact, with VITE_ prefix).
 name: Deploy to GitHub Pages
 
 on:
   push:
     branches: ["main"]
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -20,10 +17,12 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  # No `environment:` here — use **Repository secrets** only (what you have in the screenshot).
-  # Putting `environment: github-pages` on the build job can require approvals or confuse env vs repo secrets.
   build:
     runs-on: ubuntu-latest
+    # Job-level env: guarantees child processes (npm → vite) inherit these.
+    env:
+      VITE_VAULT_KEY: ${{ secrets.VITE_VAULT_KEY }}
+      VITE_CAT_API_KEY: ${{ secrets.VITE_CAT_API_KEY }}
     steps:
       - uses: actions/checkout@v4
 
@@ -40,29 +39,25 @@ jobs:
 
       - run: npm ci
 
-      # Vite reads .env.production during `vite build`; avoids env not reaching the Node process.
-      - name: Write .env.production for build
-        env:
-          VITE_VAULT_KEY: ${{ secrets.VITE_VAULT_KEY }}
-          VITE_CAT_API_KEY: ${{ secrets.VITE_CAT_API_KEY }}
+      # Vite ignores .env* files that are listed in .gitignore; this filename is not.
+      - name: Write vite.github.env for Vite (CI only)
         run: |
-          rm -f .env.production
-          if [ -z "$VITE_VAULT_KEY" ]; then
-            echo "::warning::Secret VITE_VAULT_KEY is empty or missing. Add it under Settings → Secrets and variables → Actions (Repository secrets), exact name: VITE_VAULT_KEY"
-          else
-            printf 'VITE_VAULT_KEY=%s\n' "$VITE_VAULT_KEY" >> .env.production
-            echo "VITE_VAULT_KEY is present for build (value not shown)."
+          rm -f vite.github.env
+          if [ -n "$VITE_VAULT_KEY" ]; then
+            printf 'VITE_VAULT_KEY=%s\n' "$VITE_VAULT_KEY" >> vite.github.env
           fi
           if [ -n "$VITE_CAT_API_KEY" ]; then
-            printf 'VITE_CAT_API_KEY=%s\n' "$VITE_CAT_API_KEY" >> .env.production
+            printf 'VITE_CAT_API_KEY=%s\n' "$VITE_CAT_API_KEY" >> vite.github.env
+          fi
+          echo "### Build env (lengths only, not values)" >> "$GITHUB_STEP_SUMMARY"
+          echo "- VITE_VAULT_KEY length: ${#VITE_VAULT_KEY}" >> "$GITHUB_STEP_SUMMARY"
+          echo "- VITE_CAT_API_KEY length: ${#VITE_CAT_API_KEY}" >> "$GITHUB_STEP_SUMMARY"
+          if [ "${#VITE_VAULT_KEY}" -eq 0 ]; then
+            echo "::warning::VITE_VAULT_KEY is empty. Check Repository secrets on THIS repo (forks: add secrets on the fork). Re-run after fixing."
           fi
 
       - name: Build
         run: npm run build
-        env:
-          VITE_BASE_PATH: ${{ env.VITE_BASE_PATH }}
-          VITE_CAT_API_KEY: ${{ secrets.VITE_CAT_API_KEY }}
-          VITE_VAULT_KEY: ${{ secrets.VITE_VAULT_KEY }}
 
       - uses: actions/upload-pages-artifact@v3
         with:

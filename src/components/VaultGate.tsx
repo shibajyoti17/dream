@@ -46,15 +46,29 @@ export function VaultGate({ children }: Props) {
   };
 
   if (!vaultRequired) {
+    const liveHint = import.meta.env.PROD ? (
+      <>
+        This build was deployed <strong>without</strong>{" "}
+        <code className="vault-code">VITE_VAULT_KEY</code>. Add it where the app is{" "}
+        <strong>built</strong>, then redeploy: e.g.{" "}
+        <strong>Vercel</strong> → Project → Settings → Environment Variables; or{" "}
+        <strong>GitHub</strong> → Settings → Secrets and variables → Actions (if GitHub Actions builds
+        Pages). Use the exact name <code className="vault-code">VITE_VAULT_KEY</code>.
+      </>
+    ) : (
+      <>
+        Vault passphrase not set (<code className="vault-code">VITE_VAULT_KEY</code>). Add it in{" "}
+        <code className="vault-code">.env.local</code>, then restart{" "}
+        <code className="vault-code">npm run dev</code>.
+      </>
+    );
     return (
       <>
         <div className="vault-dev-banner" role="status">
           <span className="vault-dev-heart" aria-hidden="true">
             ♡
           </span>
-          Vault passphrase not set (<code className="vault-code">VITE_VAULT_KEY</code>). The site is
-          wide open — add a key in <code className="vault-code">.env.local</code> before you share the
-          link.
+          {liveHint}
         </div>
         {children}
       </>

@@ -44,9 +44,19 @@ npm run build
 npm run preview
 ```
 
-Upload the **`dist/`** folder to [Netlify](https://netlify.com), [Vercel](https://vercel.com), [Cloudflare Pages](https://pages.cloudflare.com), or any static host.
+### Important: `.env.local` is not used online
 
-Add **`VITE_CAT_API_KEY`** and **`VITE_VAULT_KEY`** (if used) in the host’s environment when you deploy.
+Vite bakes `VITE_*` into the JS **at build time**. The live site never reads your laptop’s `.env.local`.
+
+| Where you deploy | Where to set `VITE_CAT_API_KEY` / `VITE_VAULT_KEY` |
+|------------------|---------------------------------------------------|
+| **Vercel** | Project → **Settings** → **Environment Variables** → add both, apply to **Production**, then **Redeploy**. |
+| **GitHub Pages** (Actions) | Repo → **Settings** → **Secrets and variables** → **Actions** → **Repository secrets**, then push or re-run the workflow. |
+| **Netlify** | Site → **Environment variables** in the UI. |
+
+Names must be exactly **`VITE_CAT_API_KEY`** and **`VITE_VAULT_KEY`** (include the `VITE_` prefix).
+
+Upload the **`dist/`** folder to [Netlify](https://netlify.com), [Vercel](https://vercel.com), [Cloudflare Pages](https://pages.cloudflare.com), or any static host — and set the same variables in that host’s UI if it builds for you.
 
 Optional: set `<title>` and meta `description` in **`index.html`** to match your message.
 
