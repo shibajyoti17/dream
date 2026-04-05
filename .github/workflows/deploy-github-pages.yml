@@ -1,0 +1,57 @@
+# Publishes the Vite build to GitHub Pages.
+# After pushing: Repo → Settings → Pages → Source: GitHub Actions
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: ["main"]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+
+      # Default: /repo-name/ for https://<user>.github.io/<repo>/
+      # Override: add repo variable VITE_BASE_PATH = / for a custom domain at site root.
+      - name: Set VITE_BASE_PATH
+        run: |
+          BASE="${{ vars.VITE_BASE_PATH }}"
+          if [ -z "$BASE" ]; then BASE="/${{ github.event.repository.name }}/"; fi
+          echo "VITE_BASE_PATH=$BASE" >> "$GITHUB_ENV"
+
+      - run: npm ci
+
+      - name: Build
+        run: npm run build
+        env:
+          VITE_CAT_API_KEY: ${{ secrets.VITE_CAT_API_KEY }}
+          VITE_VAULT_KEY: ${{ secrets.VITE_VAULT_KEY }}
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
