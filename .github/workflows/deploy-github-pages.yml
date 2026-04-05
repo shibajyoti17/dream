@@ -18,6 +18,11 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    # Same environment as deploy so secrets stored under
+    # Settings → Environments → github-pages are available during `npm run build`.
+    # Repository secrets (Settings → Secrets and variables → Actions) are also available.
+    environment:
+      name: github-pages
     steps:
       - uses: actions/checkout@v4
 
