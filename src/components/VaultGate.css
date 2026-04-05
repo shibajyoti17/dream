@@ -1,0 +1,413 @@
+.vault-screen {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1.25rem 3rem;
+  overflow: hidden;
+  color: #fdf8f3;
+  background:
+    radial-gradient(ellipse 100% 80% at 50% -10%, rgba(232, 160, 144, 0.35), transparent 55%),
+    radial-gradient(ellipse 70% 50% at 100% 60%, rgba(180, 120, 140, 0.25), transparent 50%),
+    radial-gradient(ellipse 60% 45% at 0% 40%, rgba(196, 92, 74, 0.2), transparent 45%),
+    linear-gradient(165deg, #1f1618 0%, #2a1e24 38%, #1a1418 100%);
+}
+
+.vault-ambience {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.vault-glow {
+  position: absolute;
+  top: 42%;
+  left: 50%;
+  width: min(120vw, 42rem);
+  height: min(120vw, 42rem);
+  transform: translate(-50%, -50%);
+  background: radial-gradient(
+    circle,
+    rgba(232, 160, 144, 0.12) 0%,
+    rgba(196, 92, 74, 0.05) 35%,
+    transparent 65%
+  );
+  animation: vault-glow-pulse 8s ease-in-out infinite;
+}
+
+@keyframes vault-glow-pulse {
+  0%,
+  100% {
+    opacity: 0.85;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.06);
+  }
+}
+
+.vault-float {
+  position: absolute;
+  font-size: clamp(1rem, 3vw, 1.65rem);
+  opacity: 0.35;
+  animation: vault-float-y 14s ease-in-out infinite;
+}
+
+.vault-float--1 {
+  top: 12%;
+  left: 14%;
+  animation-delay: 0s;
+}
+
+.vault-float--2 {
+  top: 22%;
+  right: 12%;
+  animation-delay: 1.5s;
+  font-size: clamp(0.85rem, 2.5vw, 1.2rem);
+}
+
+.vault-float--3 {
+  bottom: 26%;
+  left: 10%;
+  animation-delay: 3s;
+}
+
+.vault-float--4 {
+  bottom: 18%;
+  right: 16%;
+  animation-delay: 2s;
+  font-size: clamp(0.75rem, 2vw, 1.1rem);
+}
+
+.vault-float--5 {
+  top: 48%;
+  right: 8%;
+  animation-delay: 4s;
+  opacity: 0.28;
+  font-size: 0.9rem;
+}
+
+@keyframes vault-float-y {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-4deg);
+  }
+  50% {
+    transform: translateY(-14px) rotate(4deg);
+  }
+}
+
+.vault-card {
+  position: relative;
+  width: 100%;
+  max-width: 26rem;
+  padding: 2.35rem 2rem 2rem;
+  border-radius: calc(var(--radius) + 6px);
+  background: linear-gradient(
+    145deg,
+    rgba(255, 253, 249, 0.11) 0%,
+    rgba(255, 240, 235, 0.06) 100%
+  );
+  border: 1px solid rgba(255, 220, 210, 0.22);
+  box-shadow:
+    0 4px 32px rgba(0, 0, 0, 0.25),
+    0 0 0 1px rgba(255, 200, 190, 0.08) inset,
+    0 1px 0 rgba(255, 255, 255, 0.06) inset;
+  backdrop-filter: blur(12px);
+}
+
+.vault-card::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(
+    135deg,
+    rgba(232, 160, 144, 0.45),
+    rgba(255, 255, 255, 0.08) 40%,
+    rgba(196, 92, 74, 0.35)
+  );
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  opacity: 0.65;
+}
+
+.vault-eyebrow {
+  margin: 0 0 0.65rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255, 210, 200, 0.9);
+}
+
+.vault-title {
+  margin: 0 0 0.5rem;
+  font-family: var(--font-display);
+  font-size: clamp(1.85rem, 5.5vw, 2.35rem);
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+
+.vault-name {
+  background: linear-gradient(120deg, #fff6f0, #f0c4b8);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+
+.vault-subtitle {
+  margin: 0 0 1.1rem;
+  font-family: var(--font-display);
+  font-size: 1.12rem;
+  font-style: italic;
+  font-weight: 400;
+  color: rgba(255, 245, 240, 0.88);
+  line-height: 1.45;
+}
+
+.vault-verse {
+  margin: 0 0 1.25rem;
+  padding: 0.85rem 1rem;
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  font-style: italic;
+  line-height: 1.55;
+  color: rgba(255, 232, 225, 0.72);
+  border-left: 3px solid rgba(232, 160, 144, 0.55);
+  background: rgba(0, 0, 0, 0.12);
+  border-radius: 0 12px 12px 0;
+  quotes: none;
+}
+
+.vault-verse-cite {
+  display: block;
+  margin-top: 0.45rem;
+  font-size: 0.78rem;
+  font-style: normal;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(255, 200, 190, 0.55);
+}
+
+.vault-copy {
+  margin: 0 0 1.65rem;
+  font-size: 1.02rem;
+  line-height: 1.65;
+  color: rgba(253, 248, 243, 0.82);
+}
+
+.vault-copy em {
+  font-style: italic;
+  color: rgba(255, 220, 210, 0.95);
+}
+
+.vault-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.vault-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 210, 200, 0.75);
+}
+
+.vault-input {
+  font-family: var(--font-body);
+  font-size: 1.02rem;
+  padding: 0.85rem 1rem;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 210, 200, 0.28);
+  background: rgba(10, 8, 10, 0.35);
+  color: #fdf8f3;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.vault-input::placeholder {
+  color: rgba(255, 230, 220, 0.35);
+}
+
+.vault-input:focus {
+  outline: none;
+  border-color: rgba(232, 160, 144, 0.75);
+  box-shadow: 0 0 0 4px rgba(196, 92, 74, 0.22);
+}
+
+.vault-error {
+  margin: 0.15rem 0 0;
+  font-size: 0.92rem;
+  line-height: 1.45;
+  color: #ffc9c4;
+}
+
+.vault-submit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 0.65rem;
+  padding: 0.88rem 1.5rem;
+  border: none;
+  border-radius: 999px;
+  font-family: var(--font-body);
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  cursor: pointer;
+  color: #2a1818;
+  background: linear-gradient(135deg, #f0c4b8 0%, #e8a090 45%, #d4786a 100%);
+  box-shadow:
+    0 6px 24px rgba(196, 92, 74, 0.45),
+    0 1px 0 rgba(255, 255, 255, 0.35) inset;
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.vault-submit:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 10px 28px rgba(196, 92, 74, 0.5),
+    0 1px 0 rgba(255, 255, 255, 0.4) inset;
+}
+
+.vault-submit:active {
+  transform: translateY(0);
+}
+
+.vault-submit:focus-visible {
+  outline: 2px solid #fdf8f3;
+  outline-offset: 3px;
+}
+
+.vault-submit-heart {
+  font-size: 1.1rem;
+  line-height: 1;
+  animation: vault-heart-beat 1.4s ease-in-out infinite;
+}
+
+@keyframes vault-heart-beat {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  25% {
+    transform: scale(1.12);
+  }
+  40% {
+    transform: scale(1);
+  }
+}
+
+.vault-footnote {
+  margin: 1.5rem 0 0;
+  text-align: center;
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  font-style: italic;
+  color: rgba(255, 210, 200, 0.55);
+}
+
+.vault-bar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  padding: 0.55rem 1.25rem;
+  font-size: 0.84rem;
+  background: linear-gradient(90deg, #1f1618, #2a1e24);
+  color: rgba(253, 248, 243, 0.88);
+  border-bottom: 1px solid rgba(232, 160, 144, 0.15);
+}
+
+.vault-bar-heart {
+  margin-right: auto;
+  font-size: 1rem;
+  opacity: 0.75;
+  animation: vault-heart-beat 2s ease-in-out infinite;
+}
+
+.vault-bar-text {
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.vault-lock-btn {
+  padding: 0.4rem 0.9rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 210, 200, 0.35);
+  background: rgba(255, 255, 255, 0.05);
+  color: inherit;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.vault-lock-btn:hover {
+  background: rgba(232, 160, 144, 0.18);
+  border-color: rgba(255, 220, 210, 0.5);
+}
+
+.vault-lock-btn:focus-visible {
+  outline: 2px solid var(--accent-soft);
+  outline-offset: 2px;
+}
+
+.vault-dev-banner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.35rem 0.5rem;
+  padding: 0.7rem 1.25rem;
+  font-size: 0.88rem;
+  text-align: center;
+  line-height: 1.45;
+  background: linear-gradient(90deg, rgba(255, 220, 210, 0.35), rgba(255, 200, 190, 0.2));
+  color: var(--ink);
+  border-bottom: 1px solid rgba(196, 92, 74, 0.2);
+}
+
+.vault-dev-heart {
+  opacity: 0.7;
+}
+
+.vault-code {
+  font-family: ui-monospace, monospace;
+  font-size: 0.9em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vault-glow,
+  .vault-float,
+  .vault-submit-heart,
+  .vault-bar-heart {
+    animation: none;
+  }
+
+  .vault-submit:hover {
+    transform: none;
+  }
+}

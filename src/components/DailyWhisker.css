@@ -1,0 +1,53 @@
+.whisker-section {
+  background: var(--bg-warm);
+}
+
+.whisker-sub {
+  margin: 0 0 1.75rem;
+  color: var(--ink-soft);
+  max-width: 32rem;
+}
+
+.whisker-grid {
+  display: grid;
+  gap: 1.25rem;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 640px) {
+  .whisker-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.whisker-card {
+  margin: 0;
+  padding: 1.5rem 1.75rem;
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  border: 1px solid rgba(42, 35, 28, 0.06);
+}
+
+.whisker-card--fact {
+  border-top: 3px solid var(--accent-soft);
+}
+
+.whisker-card--note {
+  border-top: 3px solid var(--accent);
+}
+
+.whisker-card-title {
+  margin: 0 0 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.whisker-card-body {
+  margin: 0;
+  font-size: 1.1rem;
+  color: var(--ink);
+}

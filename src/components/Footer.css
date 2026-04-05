@@ -1,0 +1,23 @@
+.site-footer {
+  margin-top: auto;
+  padding: 2.5rem 1.5rem;
+  text-align: center;
+  background: var(--ink);
+  color: var(--bg);
+}
+
+.footer-line {
+  margin: 0 0 0.35rem;
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+}
+
+.footer-name {
+  color: var(--accent-soft);
+}
+
+.footer-quiet {
+  margin: 0;
+  font-size: 0.8rem;
+  opacity: 0.65;
+}

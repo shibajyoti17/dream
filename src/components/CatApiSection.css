@@ -1,0 +1,211 @@
+.catapi-section {
+  background: linear-gradient(180deg, rgba(255, 253, 249, 0.9), transparent);
+  border-top: 1px solid rgba(42, 35, 28, 0.06);
+}
+
+.catapi-lead {
+  margin: 0 0 1.75rem;
+  color: var(--ink-soft);
+  max-width: 40rem;
+}
+
+.catapi-lead a {
+  color: var(--accent);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.catapi-grid {
+  display: grid;
+  gap: 1.25rem;
+  align-items: start;
+}
+
+@media (min-width: 900px) {
+  .catapi-grid {
+    grid-template-columns: 1.15fr 1fr;
+  }
+}
+
+.catapi-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.catapi-card {
+  margin: 0;
+  padding: 1.5rem 1.75rem;
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  border: 1px solid rgba(42, 35, 28, 0.06);
+}
+
+.catapi-card--image {
+  border-top: 3px solid var(--accent);
+}
+
+.catapi-card--hint {
+  border-top: 3px solid var(--ink-soft);
+}
+
+.catapi-card--bonus {
+  border-top: 3px solid var(--accent-soft);
+}
+
+.catapi-card-title {
+  margin: 0 0 1rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.catapi-hint {
+  margin: 0;
+  color: var(--ink-soft);
+  line-height: 1.6;
+}
+
+.catapi-code {
+  font-family: ui-monospace, monospace;
+  font-size: 0.88em;
+  background: rgba(42, 35, 28, 0.06);
+  padding: 0.12em 0.35em;
+  border-radius: 6px;
+}
+
+.catapi-hint a {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.catapi-figure {
+  margin: 0;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  background: var(--bg-warm);
+}
+
+.catapi-figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+  vertical-align: middle;
+}
+
+.catapi-figure--small {
+  margin-top: 1rem;
+  max-width: 100%;
+}
+
+.catapi-caption {
+  padding: 0.65rem 0.85rem;
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+  background: rgba(250, 246, 240, 0.9);
+}
+
+.catapi-skeleton {
+  border-radius: 14px;
+  background: linear-gradient(
+    90deg,
+    rgba(42, 35, 28, 0.06) 25%,
+    rgba(42, 35, 28, 0.1) 37%,
+    rgba(42, 35, 28, 0.06) 63%
+  );
+  background-size: 400% 100%;
+  animation: catapi-shimmer 1.2s ease-in-out infinite;
+}
+
+.catapi-skeleton--hero {
+  min-height: 220px;
+}
+
+.catapi-skeleton--text {
+  min-height: 140px;
+}
+
+@keyframes catapi-shimmer {
+  0% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: 0 0;
+  }
+}
+
+.catapi-error {
+  margin: 0;
+  color: #9a3d32;
+  font-weight: 500;
+}
+
+.breed-name {
+  margin: 0 0 0.35rem;
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.breed-meta {
+  margin: 0 0 0.75rem;
+  font-size: 0.9rem;
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.breed-temper {
+  margin: 0 0 0.75rem;
+  font-size: 0.95rem;
+  color: var(--ink-soft);
+  font-style: italic;
+}
+
+.breed-desc {
+  margin: 0;
+  font-size: 0.98rem;
+  color: var(--ink-soft);
+  line-height: 1.55;
+}
+
+.catapi-bonus-intro {
+  margin: 0 0 1rem;
+  color: var(--ink-soft);
+  font-size: 0.98rem;
+}
+
+.catapi-button {
+  appearance: none;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 0.65rem 1.25rem;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  color: var(--card);
+  background: var(--ink);
+  box-shadow: 0 4px 14px rgba(42, 35, 28, 0.2);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.catapi-button:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(42, 35, 28, 0.25);
+}
+
+.catapi-button:disabled {
+  opacity: 0.65;
+  cursor: wait;
+}
+
+.catapi-button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
