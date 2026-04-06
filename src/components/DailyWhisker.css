@@ -51,3 +51,29 @@
   font-size: 1.1rem;
   color: var(--ink);
 }
+
+.whisker-skeleton {
+  border-radius: 10px;
+  min-height: 4.5rem;
+  background: linear-gradient(
+    90deg,
+    rgba(42, 35, 28, 0.06) 25%,
+    rgba(42, 35, 28, 0.1) 37%,
+    rgba(42, 35, 28, 0.06) 63%
+  );
+  background-size: 400% 100%;
+  animation: whisker-shimmer 1.2s ease-in-out infinite;
+}
+
+.whisker-skeleton--fact {
+  min-height: 5rem;
+}
+
+@keyframes whisker-shimmer {
+  0% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: 0 0;
+  }
+}

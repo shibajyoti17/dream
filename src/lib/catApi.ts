@@ -72,3 +72,66 @@ export function calendarDayKey(d = new Date()): string {
   const day = String(d.getDate()).padStart(2, "0");
   return `${y}-${m}-${day}`;
 }
+
+const STORAGE_BREEDS_SESSION = "whisker-cat-breeds-cache";
+
+function loadBreedsSessionCache(): Breed[] | null {
+  try {
+    const raw = sessionStorage.getItem(STORAGE_BREEDS_SESSION);
+    if (!raw) return null;
+    const list = JSON.parse(raw) as Breed[];
+    return Array.isArray(list) && list.length ? list : null;
+  } catch {
+    return null;
+  }
+}
+
+function saveBreedsSessionCache(list: Breed[]) {
+  try {
+    sessionStorage.setItem(STORAGE_BREEDS_SESSION, JSON.stringify(list));
+  } catch {
+    /* ignore */
+  }
+}
+
+/** Session-cached breeds list (shared with CatApiSection) to avoid duplicate `/breeds` calls. */
+export async function fetchBreedsCached(): Promise<Breed[]> {
+  let list = loadBreedsSessionCache();
+  if (!list) {
+    list = await fetchBreeds();
+    saveBreedsSessionCache(list);
+  }
+  return list;
+}
+
+function truncateFact(s: string, max: number): string {
+  const t = s.trim();
+  if (t.length <= max) return t;
+  return `${t.slice(0, max - 1).trim()}…`;
+}
+
+/**
+ * One readable “fact” line from breed data (free-tier keys — `/facts` is premium-only on The Cat API).
+ */
+export function factLineFromBreed(breed: Breed, dayKey: string): string {
+  const name = breed.name.trim() || "This breed";
+  const origin = breed.origin.trim() || "many regions";
+  const life = breed.life_span.trim() || "many years";
+  const temper = breed.temperament.trim();
+  const desc = breed.description.trim();
+
+  const slot = indexForDay(`${dayKey}|catfact`, 4);
+
+  if (slot === 0 && desc) return `${name}: ${truncateFact(desc, 260)}`;
+  if (slot === 1 && temper) return `${name} — typical temperament: ${truncateFact(temper, 220)}`;
+  if (slot === 1 && desc) return `${name}: ${truncateFact(desc, 260)}`;
+  if (slot === 2 && desc) {
+    return `${name} (${origin}, often ${life}): ${truncateFact(desc, 200)}`;
+  }
+  if (slot === 3 && temper) {
+    return `${name} from ${origin} — ${truncateFact(temper, 240)}`;
+  }
+  if (desc) return `${name}: ${truncateFact(desc, 280)}`;
+  if (temper) return `${name}: ${truncateFact(temper, 280)}`;
+  return `${name} — ${origin}; typical lifespan ${life}.`;
+}

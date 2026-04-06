@@ -67,7 +67,7 @@ export const gift = {
     "Paws, pause, breathe — you’re wonderful.",
   ],
 
-  /** Fun facts; swap for ones she doesn’t know yet */
+  /** Fallback cat facts when The Cat API key is missing or the facts request fails */
   catFacts: [
     "Cats have a special organ, the Jacobson’s organ, to “taste” smells.",
     "A group of cats is called a clowder.",

@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import type { Breed, CatImage } from "../lib/catApi";
 import {
   calendarDayKey,
-  fetchBreeds,
+  fetchBreedsCached,
   fetchCatImages,
   getCatApiKey,
   indexForDay,
@@ -10,7 +10,6 @@ import {
 import "./CatApiSection.css";
 
 const STORAGE_IMAGE = "whisker-cat-image-day";
-const STORAGE_BREEDS = "whisker-cat-breeds-cache";
 
 type CachedDailyImage = { dayKey: string; image: CatImage };
 
@@ -29,25 +28,6 @@ function loadCachedImage(dayKey: string): CatImage | null {
 function saveCachedImage(dayKey: string, image: CatImage) {
   try {
     localStorage.setItem(STORAGE_IMAGE, JSON.stringify({ dayKey, image }));
-  } catch {
-    /* ignore */
-  }
-}
-
-function loadBreedsCache(): Breed[] | null {
-  try {
-    const raw = sessionStorage.getItem(STORAGE_BREEDS);
-    if (!raw) return null;
-    const list = JSON.parse(raw) as Breed[];
-    return Array.isArray(list) && list.length ? list : null;
-  } catch {
-    return null;
-  }
-}
-
-function saveBreedsCache(list: Breed[]) {
-  try {
-    sessionStorage.setItem(STORAGE_BREEDS, JSON.stringify(list));
   } catch {
     /* ignore */
   }
@@ -122,11 +102,7 @@ export function CatApiSection() {
       setBreedLoading(true);
       setBreedError(null);
       try {
-        let list = loadBreedsCache();
-        if (!list) {
-          list = await fetchBreeds();
-          saveBreedsCache(list);
-        }
+        const list = await fetchBreedsCached();
         if (cancelled) return;
         if (!list.length) {
           setBreedError("No breeds data.");
